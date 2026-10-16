@@ -1,0 +1,19 @@
+<h1>ユーザー一覧</h1>
+
+<%= link_to "新規登録", new_user_path %>
+<%= link_to "トップ", root_path %>
+
+<ul>
+  <% @users.each do |user| %>
+    <li>
+      <%= user.uid %>
+
+      <% if current_user == user %>
+        <%= button_to "自分のアカウントを削除",
+              user_path(user),
+              method: :delete,
+              form: { data: { turbo_confirm: "削除しますか？" } } %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

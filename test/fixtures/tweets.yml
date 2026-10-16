@@ -1,0 +1,7 @@
+one:
+  message: First fixture tweet
+  user: one
+
+two:
+  message: Second fixture tweet
+  user: two

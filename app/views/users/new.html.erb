@@ -1,0 +1,35 @@
+<h1>ユーザー登録</h1>
+
+<% if @user.errors.any? %>
+  <ul>
+    <% @user.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_with model: @user do |f| %>
+  <p>
+    <%= f.label :uid, "ユーザーID" %>
+    <%= f.text_field :uid, required: true %>
+  </p>
+
+  <p>
+    <%= f.label :pass, "パスワード" %>
+    <%= f.password_field :pass, required: true %>
+  </p>
+
+  <p>
+    <%= f.label :pass_confirmation, "パスワード確認" %>
+    <%= f.password_field :pass_confirmation, required: true %>
+  </p>
+
+  <p>
+    <%= f.label :age, "年齢" %>
+    <%= f.number_field :age %>
+  </p>
+
+  <%= f.submit "登録する" %>
+<% end %>
+
+<%= link_to "戻る", root_path %>

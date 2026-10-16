@@ -1,0 +1,75 @@
+<h1>つぶやきアプリ</h1>
+
+<% flash.each do |type, message| %>
+  <p><%= message %></p>
+<% end %>
+
+<% if current_user %>
+  <p>ログイン中：<%= current_user.uid %></p>
+
+  <%= button_to "ログアウト", logout_path, method: :delete %>
+<% else %>
+  <%= link_to "ログイン", login_path %>
+  <%= link_to "ユーザー登録", new_user_path %>
+<% end %>
+
+<p>
+  <%= link_to "ユーザー一覧", users_path %>
+</p>
+
+<hr>
+
+<% if current_user %>
+  <h2>ツイートする</h2>
+
+  <%= form_with url: tweets_path, scope: :tweet do |f| %>
+    <p>
+      <%= f.text_area :message,
+            rows: 3,
+            maxlength: 255,
+            required: true %>
+    </p>
+
+    <%= f.submit "投稿する" %>
+  <% end %>
+<% end %>
+
+<hr>
+
+<h2>ツイート一覧</h2>
+
+<% @tweets.each do |tweet| %>
+  <div>
+    <p>
+      <strong>
+        <%= tweet.user&.uid || "不明なユーザー" %>
+      </strong>
+    </p>
+
+    <p><%= tweet.message %></p>
+
+    <p>いいね：<%= tweet.likes.size %>件</p>
+
+    <% if current_user %>
+  <% my_like = tweet.likes.to_a.find { |like| like.user_id == current_user.id } %>
+
+  <% if my_like %>
+    <%= button_to "いいね削除",
+          like_path(my_like),
+          method: :delete %>
+  <% else %>
+    <%= button_to "いいね",
+          likes_path(tweet_id: tweet.id),
+          method: :post %>
+  <% end %>
+
+  <% if tweet.user_id == current_user.id %>
+    <%= button_to "投稿削除",
+          tweet_path(tweet),
+          method: :delete %>
+  <% end %>
+<% end %>
+  </div>
+
+  <hr>
+<% end %>

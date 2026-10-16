@@ -1,0 +1,9 @@
+one:
+  uid: fixture_one
+  pass_digest: <%= BCrypt::Password.create("test-password", cost: BCrypt::Engine::MIN_COST) %>
+  age: 20
+
+two:
+  uid: fixture_two
+  pass_digest: <%= BCrypt::Password.create("test-password", cost: BCrypt::Engine::MIN_COST) %>
+  age: 21
