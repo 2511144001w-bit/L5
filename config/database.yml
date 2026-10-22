@@ -27,18 +27,9 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  primary:
-    <<: *default
-    # database: path/to/persistent/storage/production.sqlite3
-  cache:
-    <<: *default
-    # database: path/to/persistent/storage/production_cache.sqlite3
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *default
-    # database: path/to/persistent/storage/production_queue.sqlite3
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *default
-    # database: path/to/persistent/storage/production_cable.sqlite3
-    migrations_paths: db/cable_migrate
+  adapter: postgresql
+  encoding: unicode
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  # Keep this assignment separate from earlier apps sharing the same database.
+  schema_search_path: swexe_l5

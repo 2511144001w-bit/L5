@@ -1,0 +1,17 @@
+<% if @profile.errors.any? %>
+  <ul>
+    <% @profile.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<%= form_with model: @profile, url: user_profile_path(@user) do |f| %>
+  <p>
+    <%= f.label :message, "自己紹介（255文字以内）" %><br>
+    <%= f.text_area :message, rows: 5, maxlength: 255, required: true %>
+  </p>
+  <%= f.submit @profile.persisted? ? "更新する" : "登録する" %>
+<% end %>
+
+<p><%= link_to "プロフィールに戻る", user_profile_path(@user) %></p>

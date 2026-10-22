@@ -6,6 +6,7 @@
 
 <% if current_user %>
   <p>ログイン中：<%= current_user.uid %></p>
+  <p><%= link_to "自分のプロフィール", user_profile_path(current_user) %></p>
 
   <%= button_to "ログアウト", logout_path, method: :delete %>
 <% else %>
@@ -42,7 +43,11 @@
   <div>
     <p>
       <strong>
-        <%= tweet.user&.uid || "不明なユーザー" %>
+        <% if tweet.user %>
+          <%= link_to tweet.user.uid, user_profile_path(tweet.user) %>
+        <% else %>
+          不明なユーザー
+        <% end %>
       </strong>
     </p>
 

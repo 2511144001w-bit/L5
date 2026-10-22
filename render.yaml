@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: swexe-l5
+    runtime: ruby
+    plan: free
+    region: ohio
+    buildCommand: bash bin/render-build.sh
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RUBY_VERSION
+        value: 3.4.9
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: WEB_CONCURRENCY
+        value: 1

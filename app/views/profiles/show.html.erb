@@ -1,0 +1,27 @@
+<h1><%= @user.uid %>のプロフィール</h1>
+
+<% flash.each do |type, message| %>
+  <p><%= message %></p>
+<% end %>
+
+<% if @profile %>
+  <h2>自己紹介</h2>
+  <p style="white-space: pre-wrap"><%= @profile.message %></p>
+<% else %>
+  <p>プロフィールは未登録です。</p>
+<% end %>
+
+<% if current_user == @user %>
+  <% if @profile %>
+    <%= link_to "プロフィールを編集", edit_user_profile_path(@user) %>
+    <%= button_to "プロフィールを削除", user_profile_path(@user), method: :delete,
+          form: { data: { turbo_confirm: "プロフィールを削除しますか？" } } %>
+  <% else %>
+    <%= link_to "プロフィールを登録", new_user_profile_path(@user) %>
+  <% end %>
+<% end %>
+
+<p>
+  <%= link_to "ユーザー一覧", users_path %>
+  <%= link_to "トップ", root_path %>
+</p>

@@ -1,5 +1,6 @@
 require "test_helper"
 require "rack/mock"
+require "action_controller/metal/request_forgery_protection"
 
 class CodespacesOriginProtectionTest < Minitest::Test
   FORWARDED_ORIGIN = "https://test-codespace-3000.app.github.dev"

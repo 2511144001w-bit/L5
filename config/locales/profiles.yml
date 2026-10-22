@@ -1,0 +1,5 @@
+en:
+  activerecord:
+    attributes:
+      profile:
+        message: 自己紹介
