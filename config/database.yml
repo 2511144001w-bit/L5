@@ -31,5 +31,5 @@ production:
   encoding: unicode
   url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
-  # Keep this assignment separate from earlier apps sharing the same database.
+  # 追加
   schema_search_path: swexe_l5
