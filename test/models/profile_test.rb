@@ -35,13 +35,13 @@ class ProfileTest < ActiveSupport::TestCase
 
     assert_raises ActiveRecord::RecordNotUnique do
       Profile.transaction(requires_new: true) do
-        Profile.insert_all!([{ user_id: users(:one).id, message: "重複" }])
+        Profile.insert_all!([ { user_id: users(:one).id, message: "重複" } ])
       end
     end
   end
 
   test "deleting a user also deletes the profile" do
-    user = User.create!(uid: "profile_owner", pass: "test-password")
+    user = User.create!(uid: "profile_owner", password: "test-password", password_confirmation: "test-password")
     profile = user.create_profile!(message: "退会時に削除されます")
 
     assert_difference "Profile.count", -1 do

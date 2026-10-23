@@ -56,24 +56,22 @@
     <p>いいね：<%= tweet.likes.size %>件</p>
 
     <% if current_user %>
-  <% my_like = tweet.likes.to_a.find { |like| like.user_id == current_user.id } %>
+      <% if current_user.liked?(tweet) %>
+        <%= button_to "いいね削除",
+              like_path(tweet),
+              method: :delete %>
+      <% else %>
+        <%= button_to "いいね",
+              likes_path(tweet_id: tweet.id),
+              method: :post %>
+      <% end %>
 
-  <% if my_like %>
-    <%= button_to "いいね削除",
-          like_path(my_like),
-          method: :delete %>
-  <% else %>
-    <%= button_to "いいね",
-          likes_path(tweet_id: tweet.id),
-          method: :post %>
-  <% end %>
-
-  <% if tweet.user_id == current_user.id %>
-    <%= button_to "投稿削除",
-          tweet_path(tweet),
-          method: :delete %>
-  <% end %>
-<% end %>
+      <% if tweet.user_id == current_user.id %>
+        <%= button_to "投稿削除",
+              tweet_path(tweet),
+              method: :delete %>
+      <% end %>
+    <% end %>
   </div>
 
   <hr>

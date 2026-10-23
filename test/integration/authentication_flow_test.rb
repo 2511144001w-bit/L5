@@ -22,7 +22,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert_includes response.body, "ログイン中：auth_flow_user"
-    assert User.find_by!(uid: "auth_flow_user").authenticate_pass("test-password")
+    assert User.find_by!(uid: "auth_flow_user").authenticate("test-password")
 
     delete logout_path, params: { authenticity_token: csrf_token },
       headers: { "HTTP_ORIGIN" => "http://www.example.com" }
@@ -40,6 +40,17 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     follow_redirect!
     assert_includes response.body, "ログイン中：#{users(:one).uid}"
+  end
+
+  test "registration requires confirmation and uses password fields" do
+    get new_user_path
+    assert_select 'input[type="password"][name="user[password]"]'
+    assert_select 'input[type="password"][name="user[password_confirmation]"]'
+    assert_no_difference "User.count" do
+      post users_path, params: registration_params(password_confirmation: "").merge(authenticity_token: csrf_token),
+        headers: { "HTTP_ORIGIN" => "http://www.example.com" }
+    end
+    assert_response :unprocessable_entity
   end
 
   test "wrong password shows a validation error" do
@@ -60,7 +71,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
 
     get new_user_path
     assert_no_difference "User.count" do
-      post users_path, params: registration_params(pass_confirmation: "different-password").merge(authenticity_token: csrf_token),
+      post users_path, params: registration_params(password_confirmation: "different-password").merge(authenticity_token: csrf_token),
         headers: { "HTTP_ORIGIN" => "http://www.example.com" }
     end
     assert_response :unprocessable_entity
@@ -121,7 +132,7 @@ class AuthenticationFlowTest < ActionDispatch::IntegrationTest
   end
 
   def registration_params(**attributes)
-    { user: { uid: "auth_flow_user", pass: "test-password", pass_confirmation: "test-password", age: 20 }.merge(attributes) }
+    { user: { uid: "auth_flow_user", password: "test-password", password_confirmation: "test-password", age: 20 }.merge(attributes) }
   end
 
   def proxy_headers

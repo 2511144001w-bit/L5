@@ -4,14 +4,14 @@ class LikesController < ApplicationController
   def create
     tweet = Tweet.find(params[:tweet_id])
 
-    current_user.likes.find_or_create_by!(tweet: tweet)
+    current_user.like(tweet)
 
     redirect_to root_path, notice: "いいねしました"
   end
 
   def destroy
-    like = current_user.likes.find(params[:id])
-    like.destroy!
+    tweet = Tweet.find(params[:id])
+    current_user.unlike(tweet)
 
     redirect_to root_path, notice: "いいねを取り消しました"
   end

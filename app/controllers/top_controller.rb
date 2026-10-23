@@ -14,7 +14,7 @@ class TopController < ApplicationController
 
     user = User.find_by(uid: uid)
 
-    if user && user.authenticate_pass(pass)
+    if user && user.authenticate(pass)
       reset_session
       session[:login_uid] = user.uid
 
